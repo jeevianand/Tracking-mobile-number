@@ -1,0 +1,34 @@
+import phonenumbers
+from phonenumbers import geocoder
+from test import number
+import folium
+
+check_number = phonenumbers.parse(number)
+number_location = geocoder.description_for_number(check_number,"en")
+print(number_location)
+
+
+from phonenumbers import carrier
+service_provider = phonenumbers.parse(number)
+print(carrier.name_for_number(service_provider,"en"))
+
+
+def geocoder(phone_number):
+    # Parse the phone number to extract area code (STD code)
+    parsed_number = phonenumbers.parse(phone_number)
+    national_number = str(parsed_number.national_number)
+    
+    # Extract area code from the national number (first 2 or 3 digits)
+    if len(national_number) > 10:
+        area_code = national_number[:3]  # If the area code is 3 digits (e.g., Noida: 120)
+    else:
+        area_code = national_number[:2]  # If the area code is 2 digits (e.g., Delhi: 11)
+    
+    # Lookup the location based on the area code
+    location = geocoder.description_for_number(area_code, "Location not found for this area code")
+    return location
+
+# Example usage
+phone_number = '+91-452-9698398324'  # Replace with any valid Indian phone number (Chennai)
+location = geocoder(phone_number)
+print(f"Phone number {phone_number} is from: {location}")
